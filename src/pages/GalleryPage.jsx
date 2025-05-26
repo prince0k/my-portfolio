@@ -1,23 +1,81 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Github, Linkedin, Mail, Menu, X, Sun, Moon } from 'lucide-react';
+import { Sun, Moon, Menu, X } from 'lucide-react';
 import Gallery from '../components/Gallery';
 
 const GalleryPage = ({ darkMode, setDarkMode }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Sample images - replace with your actual images
-  const images = [
-    { src: '/assets/images/image1.jpg', alt: 'Project Screenshot 1' },
-    { src: '/assets/images/image2.jpg', alt: 'Project Screenshot 2' },
-    { src: '/assets/images/image3.jpg', alt: 'UI Design' },
-    { src: '/assets/images/image4.jpg', alt: 'Mobile App' },
-    { src: '/assets/images/image5.jpg', alt: 'Web Design' },
-    { src: '/assets/images/image6.jpg', alt: 'Branding' },
+  // Sample gallery data with enhanced metadata
+  const galleryImages = [
+    {
+      src: '/images/project1.jpg',
+      alt: 'E-commerce Fashion Hub',
+      title: 'Fashion E-commerce Platform',
+      description: 'Instagram-based fashion store with custom product showcases',
+      tags: ['React', 'E-commerce', 'UI Design'],
+      date: '2023'
+    },
+    {
+      src: '/images/project2.jpg',
+      alt: 'Portfolio Website',
+      title: 'Personal Portfolio',
+      description: 'Responsive portfolio built with React and Tailwind CSS',
+      tags: ['React', 'Tailwind CSS', 'Responsive'],
+      date: '2023'
+    },
+    {
+      src: '/images/project3.jpg',
+      alt: 'Todo App',
+      title: 'Task Management App',
+      description: 'Todo application with Firebase integration',
+      tags: ['React', 'Firebase', 'Authentication'],
+      date: '2022'
+    },
+    {
+      src: '/images/project4.jpg',
+      alt: 'Blog Platform',
+      title: 'CMS Blog System',
+      description: 'Content management system for bloggers',
+      tags: ['Node.js', 'React', 'Markdown'],
+      date: '2022'
+    },
+    {
+      src: '/images/project5.jpg',
+      alt: 'Agricultural Research',
+      title: 'Agricultural Machinery Study',
+      description: 'Research on modern agricultural equipment',
+      tags: ['Research', 'Agriculture', 'Data'],
+      date: '2021'
+    },
+    {
+      src: '/images/project6.jpg',
+      alt: 'Food Packaging',
+      title: 'Food Shelf Life Research',
+      description: 'Study of packaging materials on food preservation',
+      tags: ['Research', 'Food Science', 'Packaging'],
+      date: '2021'
+    },
+    {
+      src: '/images/project7.jpg',
+      alt: 'UI Design',
+      title: 'Mobile App Interface',
+      description: 'Custom mobile application UI design',
+      tags: ['UI/UX', 'Figma', 'Mobile'],
+      date: '2020'
+    },
+    {
+      src: '/images/project8.jpg',
+      alt: 'Brand Identity',
+      title: 'Branding Project',
+      description: 'Complete brand identity design',
+      tags: ['Branding', 'Logo', 'Identity'],
+      date: '2020'
+    }
   ];
 
   return (
-    <div className={`min-h-screen ${darkMode ? 'dark' : ''}`}>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       {/* Navigation */}
       <div className="fixed top-4 left-4 z-50">
         <div className="relative">
@@ -37,67 +95,43 @@ const GalleryPage = ({ darkMode, setDarkMode }) => {
               menuOpen ? "max-h-96 p-6 w-64" : "max-h-0 p-0 w-0"
             }`}
           >
-            <ul className="space-y-4 text-gray-700 dark:text-gray-200">
-              <li>
-                <Link
-                  to="/"
-                  className="block w-full text-left px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                >
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/gallery"
-                  className="block w-full text-left px-4 py-2 rounded-md bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300"
-                >
-                  Gallery
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/aboutme"
-                  className="block w-full text-left px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                >
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/contactme"
-                  className="block w-full text-left px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                >
-                  Contact
-                </Link>
-              </li>
-            </ul>
-            
-            <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-              <div className="flex justify-center space-x-4">
-                <a
-                  href="https://github.com/yourusername"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300 hover:scale-110"
-                >
-                  <Github className="w-5 h-5 text-gray-700 dark:text-white" />
-                </a>
-                <a
-                  href="https://linkedin.com/in/yourusername"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 flex items-center justify-center bg-blue-100 dark:bg-blue-900 rounded-full hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors duration-300 hover:scale-110"
-                >
-                  <Linkedin className="w-5 h-5 text-blue-700 dark:text-blue-300" />
-                </a>
-                <a
-                  href="mailto:your@email.com"
-                  className="w-10 h-10 flex items-center justify-center bg-red-100 dark:bg-red-900 rounded-full hover:bg-red-200 dark:hover:bg-red-800 transition-colors duration-300 hover:scale-110"
-                >
-                  <Mail className="w-5 h-5 text-red-600 dark:text-red-300" />
-                </a>
-              </div>
-            </div>
+            <nav className="flex flex-col space-y-4">
+              <Link 
+                to="/" 
+                onClick={() => setMenuOpen(false)}
+                className="text-gray-700 dark:text-white hover:underline hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              >
+                Home
+              </Link>
+              <Link 
+                to="/gallery" 
+                onClick={() => setMenuOpen(false)}
+                className="text-blue-600 dark:text-blue-400 font-medium"
+              >
+                Gallery
+              </Link>
+              <Link 
+                to="/projects" 
+                onClick={() => setMenuOpen(false)}
+                className="text-gray-700 dark:text-white hover:underline hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              >
+                Projects
+              </Link>
+              <Link 
+                to="/aboutme" 
+                onClick={() => setMenuOpen(false)}
+                className="text-gray-700 dark:text-white hover:underline hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              >
+                About Me
+              </Link>
+              <Link 
+                to="/contactme" 
+                onClick={() => setMenuOpen(false)}
+                className="text-gray-700 dark:text-white hover:underline hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              >
+                Contact
+              </Link>
+            </nav>
           </div>
         </div>
       </div>
@@ -119,32 +153,35 @@ const GalleryPage = ({ darkMode, setDarkMode }) => {
       {/* Main content */}
       <main className="pt-24 pb-12 px-4">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
-            My Gallery
-          </h1>
-          <p className="text-center text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto">
-            Explore my collection of projects, designs, and creative works. Each piece represents a unique challenge and solution.
-          </p>
-          <Gallery images={images} />
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+              Project Gallery
+            </h1>
+            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              A visual showcase of my work and projects. Click on any image to view details.
+            </p>
+          </div>
+
+          {/* Gallery component */}
+          <Gallery images={galleryImages} />
+
+          {/* CTA Section */}
+          <div className="mt-16 text-center">
+            <h2 className="text-2xl font-semibold mb-4">Want to see more?</h2>
+            <Link 
+              to="/projects" 
+              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-blue-600 text-white rounded-lg hover:from-purple-600 hover:to-blue-700 transition-all duration-300"
+            >
+              View All Projects
+              <ChevronRight className="w-5 h-5 ml-2" />
+            </Link>
+          </div>
         </div>
       </main>
 
       <footer className="py-8 text-gray-500 dark:text-gray-400 text-sm border-t border-gray-200 dark:border-gray-700">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p>&copy; {new Date().getFullYear()} Your Name. All rights reserved.</p>
-            <div className="flex space-x-4 mt-4 md:mt-0">
-              <Link to="/" className="hover:text-gray-700 dark:hover:text-white transition-colors">
-                Home
-              </Link>
-              <Link to="/aboutme" className="hover:text-gray-700 dark:hover:text-white transition-colors">
-                About
-              </Link>
-              <Link to="/contactme" className="hover:text-gray-700 dark:hover:text-white transition-colors">
-                Contact
-              </Link>
-            </div>
-          </div>
+        <div className="container mx-auto px-4 text-center">
+          &copy; {new Date().getFullYear()} Your Name. All rights reserved.
         </div>
       </footer>
     </div>
