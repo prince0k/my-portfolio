@@ -56,9 +56,9 @@ export default function App() {
                   Home
                 </Link>
                 <Link 
-                  to="/gallery" 
+                  to="/gallerypage" 
                   onClick={() => setMenuOpen(false)} 
-                  className={`text-gray-700 dark:text-white hover:underline ${window.location.pathname === "/gallery" ? "font-bold text-blue-600 dark:text-blue-400" : ""}`}
+                  className={`text-gray-700 dark:text-white hover:underline ${window.location.pathname === "/gallerypage" ? "font-bold text-blue-600 dark:text-blue-400" : ""}`}
                 >
                   Gallery
                 </Link>
@@ -119,7 +119,7 @@ export default function App() {
             } 
           />
           <Route 
-            path="/gallery" 
+            path="/gallerypage" 
             element={
               <GalleryPage
                 darkMode={darkMode}
