@@ -7,13 +7,18 @@ const postRoutes = require('./routes/posts');
 
 const app = express();
 
-// Middleware
-app.use(cors({
-  origin: ['http://localhost:3001', 'http://localhost:3000'],
+// CORS configuration
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production'
+    ? [process.env.FRONTEND_URL || 'https://your-frontend-domain.com']
+    : ['http://localhost:3001', 'http://localhost:3000'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
-}));
+};
+
+// Middleware
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Request logging middleware
@@ -25,6 +30,11 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/messages', messageRoutes);
 app.use('/api/posts', postRoutes);
+
+// Health check route
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
 
 // Database connection status route
 app.get('/api/status', async (req, res) => {
@@ -58,9 +68,10 @@ const startServer = async () => {
     // Start server
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, '0.0.0.0', () => {
-      console.log(`Server running on port ${PORT}`);
+      console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+      console.log(`Health check: http://localhost:${PORT}/health`);
       console.log(`API Status: http://localhost:${PORT}/api/status`);
-      console.log('CORS enabled for origins:', ['http://localhost:3001', 'http://localhost:3000']);
+      console.log('CORS enabled for origins:', corsOptions.origin);
     });
   } catch (error) {
     console.error('Failed to start server:', error);
