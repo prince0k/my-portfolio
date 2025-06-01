@@ -2,8 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/database');
-const messageRoutes = require('./routes/messages');
-const postRoutes = require('./routes/posts');
 
 const app = express();
 
@@ -27,13 +25,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// Routes
-app.use('/api/messages', messageRoutes);
-app.use('/api/posts', postRoutes);
-
-// Health check route
+// Health check route - doesn't require database connection
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok' });
+  res.status(200).json({ 
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV
+  });
 });
 
 // Database connection status route
@@ -53,6 +51,14 @@ app.get('/api/status', async (req, res) => {
   }
 });
 
+// Import routes
+const messageRoutes = require('./routes/messages');
+const postRoutes = require('./routes/posts');
+
+// Routes
+app.use('/api/messages', messageRoutes);
+app.use('/api/posts', postRoutes);
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Error occurred:', err);
@@ -61,21 +67,25 @@ app.use((err, req, res, next) => {
 
 // Start server and connect to database
 const startServer = async () => {
+  const PORT = process.env.PORT || 5000;
+  
   try {
-    // Connect to MongoDB
-    await connectDB();
-    
-    // Start server
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, '0.0.0.0', () => {
+    // Start server first
+    const server = app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
       console.log(`Health check: http://localhost:${PORT}/health`);
-      console.log(`API Status: http://localhost:${PORT}/api/status`);
       console.log('CORS enabled for origins:', corsOptions.origin);
     });
+
+    // Then try to connect to database
+    console.log('Connecting to MongoDB...');
+    await connectDB();
+    console.log('Database connection successful');
   } catch (error) {
-    console.error('Failed to start server:', error);
-    process.exit(1);
+    console.error('Failed to start server or connect to database:', error);
+    if (process.env.NODE_ENV !== 'production') {
+      process.exit(1);
+    }
   }
 };
 
@@ -92,5 +102,7 @@ process.on('unhandledRejection', (reason, promise) => {
 process.on('uncaughtException', (error) => {
   console.error('Uncaught Exception:');
   console.error(error);
-  process.exit(1);
+  if (process.env.NODE_ENV !== 'production') {
+    process.exit(1);
+  }
 });
