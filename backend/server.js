@@ -8,7 +8,7 @@ const app = express();
 // CORS configuration
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production'
-    ? [process.env.FRONTEND_URL || 'https://your-frontend-domain.com']
+    ? [process.env.FRONTEND_URL || 'https://*.onrender.com']
     : ['http://localhost:3001', 'http://localhost:3000'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -30,7 +30,8 @@ app.get('/health', (req, res) => {
   res.status(200).json({ 
     status: 'ok',
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV
+    environment: process.env.NODE_ENV,
+    version: process.env.npm_package_version || '1.0.0'
   });
 });
 
@@ -43,7 +44,8 @@ app.get('/api/status', async (req, res) => {
       state: ['disconnected', 'connected', 'connecting', 'disconnecting'][connection.readyState],
       host: connection.host,
       database: connection.db?.databaseName,
-      port: process.env.PORT
+      port: process.env.PORT,
+      environment: process.env.NODE_ENV
     };
     res.json(status);
   } catch (error) {
@@ -74,6 +76,7 @@ const startServer = async () => {
     const server = app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
       console.log(`Health check: http://localhost:${PORT}/health`);
+      console.log(`API Status: http://localhost:${PORT}/api/status`);
       console.log('CORS enabled for origins:', corsOptions.origin);
     });
 
