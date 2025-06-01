@@ -1,8 +1,58 @@
-import {
-  Github, Linkedin, Mail, Menu, X, Sun, Moon, ChevronLeft, ChevronRight
-} from "lucide-react";
+import { useState } from 'react';
+import { Github, Linkedin, Mail, Sun, Moon } from "lucide-react";
 
 const Contactme = ({ darkMode, setDarkMode }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [id]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      const response = await fetch('http://localhost:5000/api/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) throw new Error('Submission failed');
+
+      setSubmitStatus({
+        success: true,
+        message: 'Message sent successfully!'
+      });
+      setFormData({
+        name: '',
+        email: '',
+        message: ''
+      });
+    } catch (error) {
+      setSubmitStatus({
+        success: false,
+        message: 'Failed to send message. Please try again.'
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen">
       {/* Dark mode toggle */}
@@ -68,7 +118,7 @@ const Contactme = ({ darkMode, setDarkMode }) => {
             
             <div>
               <h3 className="text-xl font-semibold mb-4">Send a Message</h3>
-              <form className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Name
@@ -76,8 +126,11 @@ const Contactme = ({ darkMode, setDarkMode }) => {
                   <input
                     type="text"
                     id="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Your name"
+                    required
                   />
                 </div>
                 
@@ -88,8 +141,11 @@ const Contactme = ({ darkMode, setDarkMode }) => {
                   <input
                     type="email"
                     id="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="your@email.com"
+                    required
                   />
                 </div>
                 
@@ -100,16 +156,26 @@ const Contactme = ({ darkMode, setDarkMode }) => {
                   <textarea
                     id="message"
                     rows="4"
+                    value={formData.message}
+                    onChange={handleChange}
                     className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Your message..."
+                    required
                   ></textarea>
                 </div>
                 
+                {submitStatus && (
+                  <div className={`p-3 rounded-lg ${submitStatus.success ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                    {submitStatus.message}
+                  </div>
+                )}
+                
                 <button
                   type="submit"
-                  className="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 font-medium"
+                  disabled={isSubmitting}
+                  className={`w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 font-medium ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
                 >
-                  Send Message
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
               </form>
             </div>

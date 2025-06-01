@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import {
-  Github, Linkedin, Mail, Menu, X, Sun, Moon, ChevronLeft, ChevronRight
+  Github,
+  Linkedin,
+  Mail,
+  Menu,
+  X,
+  Sun,
+  Moon,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
 import Home from './pages/Home.jsx';
@@ -8,6 +16,8 @@ import GalleryPage from './pages/GalleryPage.jsx';
 import Contactme from './pages/Contactme.jsx';
 import Projects from './pages/Projects.jsx';
 import Aboutme from './pages/Aboutme.jsx';
+import AdminMessages from './pages/AdminMessages.jsx';
+import AdminDashboard from './pages/AdminDashboard.jsx';
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -88,6 +98,21 @@ export default function App() {
                 >
                   Contact Me
                 </Link>
+                <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+                <Link 
+                  to="/admin/dashboard" 
+                  onClick={() => setMenuOpen(false)} 
+                  className={`text-gray-700 dark:text-white hover:underline ${window.location.pathname === "/admin/dashboard" ? "font-bold text-blue-600 dark:text-blue-400" : ""}`}
+                >
+                  Admin Dashboard
+                </Link>
+                <Link 
+                  to="/admin/messages" 
+                  onClick={() => setMenuOpen(false)} 
+                  className={`text-gray-700 dark:text-white hover:underline ${window.location.pathname === "/admin/messages" ? "font-bold text-blue-600 dark:text-blue-400" : ""}`}
+                >
+                  View Messages
+                </Link>
               </nav>
             </div>
           </div>
@@ -152,6 +177,18 @@ export default function App() {
                 darkMode={darkMode}
                 setDarkMode={setDarkMode}
               />
+            } 
+          />
+          <Route 
+            path="/admin/messages" 
+            element={
+              <AdminMessages />
+            } 
+          />
+          <Route 
+            path="/admin/dashboard" 
+            element={
+              <AdminDashboard />
             } 
           />
           <Route path="*" element={<Navigate to="/" />} />
